@@ -1,0 +1,50 @@
+package org.foryou.moodleconduct.controller;
+
+import java.util.List;
+
+import org.foryou.moodleconduct.dao.entity.TestCategory;
+import org.foryou.moodleconduct.dao.vo.TestCategoryVo;
+import org.foryou.moodleconduct.service.TestCategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/test/category")
+public class TestCategoryController {
+
+	@Autowired
+	private TestCategoryService testCategoryService;
+
+	@PostMapping("/add")
+	public TestCategory addCategory(@RequestBody TestCategoryVo testCategoryVo ){
+		return testCategoryService.addCategory(testCategoryVo);
+	}
+
+	@PostMapping("/find/category")
+	public List<TestCategory> searchCategory(@RequestBody TestCategoryVo testCategoryVo ){
+		return testCategoryService.searchCategory(testCategoryVo);
+	}
+
+	@PostMapping("/find/subcategory")
+	public List<TestCategory> searchSubCategory(@RequestBody TestCategoryVo testCategoryVo ){
+		return testCategoryService.searchSubCategory(testCategoryVo);
+	}	
+
+	@PostMapping("/find/subcategory/name")
+	public List<TestCategory> searchSubCategoryByName(@RequestBody TestCategoryVo testCategoryVo ){
+		return testCategoryService.searchSubCategoryByName(testCategoryVo);
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public void  deleteCategory(@PathVariable(value="id") long id){
+		testCategoryService.deleteCategory(id);
+	}
+
+
+
+}
