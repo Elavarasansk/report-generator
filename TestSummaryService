@@ -1,0 +1,57 @@
+package org.foryou.moodleconduct.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.foryou.moodleconduct.dao.entity.TestSummary;
+import org.foryou.moodleconduct.dao.entity.UserAuthorityInfo;
+import org.foryou.moodleconduct.dao.repository.TestSummaryRepository;
+import org.foryou.moodleconduct.dao.repository.UserAuthorityInfoRepository;
+import org.foryou.moodleconduct.dao.vo.TestSummaryVo;
+import org.foryou.moodleconduct.utils.storage.CookieSessionStorage;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
+@Service
+public class TestSummaryService {
+
+	@Autowired
+	private TestSummaryRepository testSummaryRepository;
+
+	@Autowired
+	private UserAuthorityInfoRepository userAuthorityInfoRepo;
+
+
+	public TestSummary addSummary(TestSummaryVo testSummaryVo) {		
+		String sessionUser = null;
+		if(!ObjectUtils.isEmpty(CookieSessionStorage.get())) {
+			sessionUser = CookieSessionStorage.get().getUserName();
+		}
+		UserAuthorityInfo userAuthorityInfo = userAuthorityInfoRepo.findByUserCredentialsId(testSummaryVo.getUserAuthId());
+		TestSummary testSummary = TestSummary.builder()
+				.createUser(sessionUser)
+				.updateUser(sessionUser)
+				.userAuthorityInfo(userAuthorityInfo)
+				.build();		
+		BeanUtils.copyProperties(testSummaryVo, testSummary);		
+		return testSummaryRepository.save(testSummary);
+	}
+	
+	
+	public TestSummary getSummary(Long id) {
+		Optional<TestSummary> testSummary = testSummaryRepository.findById(id) ; 
+		return testSummary.isPresent() ? testSummary.get() : null;		
+	}
+	
+	public List<TestSummary> getAllSummary() {
+		return testSummaryRepository.findAll();		
+	}
+
+	public void deleteSummary(Long id) {
+		testSummaryRepository.deleteById(id);
+	}
+
+	
+}
