@@ -1,0 +1,66 @@
+package org.foryou.moodleconduct.service;
+
+
+
+
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.foryou.moodleconduct.dao.entity.TestCategory;
+import org.foryou.moodleconduct.dao.repository.TestCategoryRepo;
+import org.foryou.moodleconduct.dao.vo.TestCategoryVo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
+
+
+
+@Service
+public class TestCategoryService {
+
+	@Autowired
+	private TestCategoryRepo testCategoryRepo;
+
+
+	public TestCategory addCategory(TestCategoryVo testCategoryVo ) {
+		if(checkCategoryExists(testCategoryVo)) {
+			throw new DuplicateKeyException("Category - \""+testCategoryVo.getCategory()+"\""
+					+" Sub category - \""+testCategoryVo.getSubCategory()+"\""
+					+" already exists."
+					+ " So Category cannot be registered");
+		}
+		TestCategory testCategory = TestCategory.builder().build();
+		BeanUtils.copyProperties( testCategoryVo, testCategory);
+		return testCategoryRepo.save(testCategory);
+	}
+
+	private boolean checkCategoryExists(TestCategoryVo testCategoryVo ) {
+		return testCategoryRepo
+				.existsByCategoryContainingIgnoreCaseAndSubCategoryContainingIgnoreCase
+				(testCategoryVo.getCategory(), testCategoryVo.getSubCategory());
+	}
+
+	public List<TestCategory> searchCategory(TestCategoryVo testCategoryVo ) {		
+		Optional<List<TestCategory>> searchList = testCategoryRepo.findByCategoryContainingIgnoreCase(testCategoryVo.getCategory()); 
+		return searchList.isPresent() ? searchList.get() : Collections.emptyList(); 
+	}
+
+	public  List<TestCategory> searchSubCategory(TestCategoryVo testCategoryVo ) {
+		Optional<List<TestCategory>> searchList = testCategoryRepo.findByCategoryAndSubCategoryContainingIgnoreCase(testCategoryVo.getCategory(),testCategoryVo.getSubCategory());
+		return searchList.isPresent() ? searchList.get() : Collections.emptyList() ; 
+	}
+
+	public  List<TestCategory> searchSubCategoryByName(TestCategoryVo testCategoryVo ) {
+		Optional<List<TestCategory>> searchList =  testCategoryRepo.findBySubCategoryContainingIgnoreCase(testCategoryVo.getSubCategory()); 
+		return searchList.isPresent() ? searchList.get() : Collections.emptyList() ; 
+
+	}
+
+	public void deleteCategory(Long id) {
+		testCategoryRepo.deleteById(id);
+	}
+
+}
