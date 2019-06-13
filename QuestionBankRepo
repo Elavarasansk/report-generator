@@ -1,0 +1,22 @@
+package org.foryou.moodleconduct.dao.repository;
+
+
+import java.util.List;
+import java.util.Optional;
+
+import org.foryou.moodleconduct.dao.entity.QuestionBank;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
+public interface QuestionBankRepo  extends JpaRepository<QuestionBank, Long> {
+	
+	public boolean existsByQuestionBankNameContainingIgnoreCase(String questionBankName);
+	
+	public Optional<List<QuestionBank>> findByTestCategoryIdAndQuestionBankNameContainingIgnoreCase(Long categoryId,String questionBankName);
+	
+	public Optional<List<QuestionBank>> findByQuestionBankNameContainingIgnoreCase(String questionBankName);
+
+
+
+}
