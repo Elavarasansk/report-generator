@@ -1,0 +1,57 @@
+package org.foryou.moodleconduct.controller;
+
+import java.util.List;
+
+import org.foryou.moodleconduct.dao.entity.QuestionAnswer;
+import org.foryou.moodleconduct.dao.vo.QuestionAnswerVo;
+import org.foryou.moodleconduct.service.QuestionAnswerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/question/answer")
+public class QuestionAnswerController {
+
+	@Autowired
+	private QuestionAnswerService questionAnswerService;
+
+	@PostMapping("/add")
+	public QuestionAnswer addQuestionAnswer(@RequestBody QuestionAnswerVo questionAnswerVo){
+		return questionAnswerService.addQuestionAnswer(questionAnswerVo);
+	}
+	
+	@PostMapping("/add/all")
+	public List<QuestionAnswer> addAllQuestionAnswer(@RequestBody List<QuestionAnswerVo> questionAnswerVoList){
+		return questionAnswerService.addAllQuestionAnswer(questionAnswerVoList);
+	}
+	
+	@GetMapping("/find/{questionBankId}")
+	public List<QuestionAnswer> getAllQuestionAnswer(@PathVariable(value = "questionBankId") long questionBankId ){
+		return questionAnswerService.getByQuestionBankId(questionBankId);
+	}
+
+	@PostMapping("/find/all")
+	public List<QuestionAnswer> getAllQuestionAnswer(){
+		return questionAnswerService.getAllQuestionAnswer();
+	}
+
+	
+	@DeleteMapping("/delete/{id}")
+	public void  deleteQuestionAnswer(@PathVariable(value="id") long id){
+		questionAnswerService.deleteQuestionAnswer(id);
+	}
+	
+	@DeleteMapping("/delete/question/bank/{id}")
+	public void  deleteByQuestionBankId(@PathVariable(value="id") long id){
+		questionAnswerService.deleteByQuestionBankId(id);
+	}
+
+
+
+}
