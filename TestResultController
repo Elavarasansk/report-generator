@@ -1,0 +1,46 @@
+package org.foryou.moodleconduct.controller;
+
+import java.util.List;
+
+import org.foryou.moodleconduct.dao.entity.TestResult;
+import org.foryou.moodleconduct.dao.vo.TestResultVo;
+import org.foryou.moodleconduct.service.TestResultService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/test/result")
+public class TestResultController {
+
+	@Autowired
+	private TestResultService testResultService;
+
+	@PostMapping("/add")
+	public TestResult addTestReult(@RequestBody TestResultVo testResultVo){
+		return testResultService.addTestReult(testResultVo);
+	}
+
+	@PostMapping("/add/all")
+	public List<TestResult> addTestReultList(@RequestBody List<TestResultVo> testResultVoList){
+		return testResultService.addTestReultList(testResultVoList);
+	}
+
+	@GetMapping("/assignment/{assignId}")
+	public List<TestResult> getByAssignmentId(@PathVariable(value="assignId") long assignId){
+		return testResultService.getByAssignmentId(assignId);
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public void  deleteTestResult(@PathVariable(value="id") long id){
+		testResultService.deleteTestResult(id);
+	}
+
+
+
+}
