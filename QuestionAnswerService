@@ -1,0 +1,71 @@
+package org.foryou.moodleconduct.service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.foryou.moodleconduct.dao.entity.QuestionAnswer;
+import org.foryou.moodleconduct.dao.entity.QuestionBank;
+import org.foryou.moodleconduct.dao.repository.QuestionAnswerRepo;
+import org.foryou.moodleconduct.dao.vo.QuestionAnswerVo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class QuestionAnswerService {
+
+	@Autowired
+	private QuestionAnswerRepo questionBankRepo;
+
+	@Autowired
+	private QuestionBankService questionBankService;
+
+
+	public QuestionAnswer addQuestionAnswer(QuestionAnswerVo questionAnswerVo) {
+		QuestionBank questionBank = questionBankService.getQuestionBank(questionAnswerVo.getQuestionBankId());
+		//TODO check exists if needed.
+		QuestionAnswer questionAnswer = QuestionAnswer.builder()
+				.questionBank(questionBank)
+				.build();		
+		BeanUtils.copyProperties(questionAnswerVo, questionAnswer);
+		return questionBankRepo.save(questionAnswer);
+	}
+
+
+	public List<QuestionAnswer> addAllQuestionAnswer(List<QuestionAnswerVo> questionAnswerVoList) {
+		List<QuestionAnswer> questionAnswerList = new ArrayList<>();
+		for(  QuestionAnswerVo  questionAnswerVo  :  questionAnswerVoList ) {
+			QuestionBank questionBank = questionBankService.getQuestionBank(questionAnswerVo.getQuestionBankId());
+			//TODO check exists if needed.
+			QuestionAnswer questionAnswer = QuestionAnswer.builder()
+					.questionBank(questionBank)
+					.build();		
+			BeanUtils.copyProperties(questionAnswerVo, questionAnswer);
+			questionAnswerList.add(questionAnswer);
+		}
+		return questionBankRepo.saveAll(questionAnswerList);
+
+	}
+
+	public List<QuestionAnswer> getByQuestionBankId(long questionBankId) {
+		Optional<List<QuestionAnswer>> questionBankList = questionBankRepo.findByQuestionBankId(questionBankId);
+		return questionBankList.isPresent() ? questionBankList.get() : Collections.emptyList(); 
+	}
+
+
+	public List<QuestionAnswer> getAllQuestionAnswer() {
+		return questionBankRepo.findAll();
+	}
+
+	public void deleteQuestionAnswer(Long id) {
+		questionBankRepo.deleteById(id);
+	}
+
+	public void deleteByQuestionBankId(Long id) {
+		questionBankRepo.deleteByQuestionBankId(id);
+	}
+
+
+}
