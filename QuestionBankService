@@ -1,0 +1,63 @@
+package org.foryou.moodleconduct.service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.foryou.moodleconduct.dao.entity.QuestionBank;
+import org.foryou.moodleconduct.dao.repository.QuestionBankRepo;
+import org.foryou.moodleconduct.dao.vo.QuestionBankVo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class QuestionBankService {
+
+	@Autowired
+	private QuestionBankRepo questionBankRepo;
+
+	public QuestionBank addQuestionBank(QuestionBankVo questionBankVo) {
+		if(checkQuestionBankNameExists(questionBankVo)) {
+			throw new DuplicateKeyException("QuestionBankName - \""+questionBankVo.getQuestionBankName()+"\""
+					+" already exists."
+					+ " So QuestionBankName cannot be registered");
+		}
+		QuestionBank questionBank = QuestionBank.builder().build();		
+		BeanUtils.copyProperties(questionBankVo, questionBank);
+		return questionBankRepo.save(questionBank);
+	}
+
+	public List<QuestionBank> searchQuestionBank(QuestionBankVo questionBankVo) {	
+		Optional<List<QuestionBank>> questionBankList = questionBankRepo.
+				findByTestCategoryIdAndQuestionBankNameContainingIgnoreCase(questionBankVo.getCategoryId(),questionBankVo.getQuestionBankName()); 
+		return questionBankList.isPresent() ? questionBankList.get() : Collections.emptyList();
+	}
+	
+	public List<QuestionBank> searchQuestionBankByName(QuestionBankVo questionBankVo) {	
+		Optional<List<QuestionBank>> questionBankList = questionBankRepo.
+				findByQuestionBankNameContainingIgnoreCase(questionBankVo.getQuestionBankName()); 
+		return questionBankList.isPresent() ? questionBankList.get() : Collections.emptyList();
+	}
+	
+	public List<QuestionBank> getAllQuestionBank() {	
+		return questionBankRepo.findAll();
+	}
+
+	public QuestionBank getQuestionBank(Long id) {	
+		Optional<QuestionBank> questionBank = questionBankRepo.findById(id) ; 
+		return questionBank.isPresent() ? questionBank.get() : null;
+	}
+
+	private boolean checkQuestionBankNameExists(QuestionBankVo questionBankVo) {	
+		return questionBankRepo.existsByQuestionBankNameContainingIgnoreCase(questionBankVo.getQuestionBankName());
+	}
+
+	public void  deleteQuestionBank(Long id) {	
+		questionBankRepo.deleteById(id);
+	}
+
+
+
+}
