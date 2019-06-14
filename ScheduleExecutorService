@@ -1,0 +1,39 @@
+package org.foryou.moodleconduct.service;
+
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.foryou.moodleconduct.dao.repository.TestAssignmentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class ScheduleExecutorService {
+
+	@Autowired
+	private TestAssignmentRepository testAssignmentRepository;
+
+	public void schedule(Timestamp startDate , Timestamp endDate,List<Long> assigneeList){	
+		ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+		long duration  = Math.subtractExact(endDate.getTime() , startDate.getTime()); 
+		long delay = TimeUnit.MILLISECONDS.toMinutes(duration);
+		ses.schedule(execute(assigneeList),delay,TimeUnit.MINUTES);
+		ses.shutdown();
+	}
+	
+
+	private Runnable execute(List<Long> assigneeList){
+		Runnable runnable = new Runnable(){
+			public void run(){
+				testAssignmentRepository.updateExpiredStatus(assigneeList);
+			}
+		};
+		return runnable;
+
+	}
+
+}
