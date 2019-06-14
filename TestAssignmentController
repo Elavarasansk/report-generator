@@ -25,6 +25,11 @@ public class TestAssignmentController {
 	public TestAssignment addTestAssignment(@RequestBody TestAssignmentVo testAssignmentVo){
 		return testAssignmentService.addTestAssignment(testAssignmentVo);
 	}
+	
+	@PostMapping("/update/expired")
+	public void addTestAssignment(@RequestBody List<Long> assigneeListList){
+		 testAssignmentService.updateExpiredStatus(assigneeListList);
+	}
 
 	@GetMapping("/find/{id}")
 	public TestAssignment getTestAssignment(@PathVariable(value="id") long id){
