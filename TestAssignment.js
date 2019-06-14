@@ -33,7 +33,28 @@ class TestAssignment extends Component {
 
 	constructor(props){
 		super(props);
-		this.state = { open: false };
+		this.state = {
+				open: false,
+				totalQuestion : 5 
+		};
+	}
+
+	calculateTotalTime = (expirationTime, questionCount) => {
+		
+		if(!expirationTime){
+			return "00:00:00"
+		}
+		let totalTime = expirationTime.clone();
+		let timeSplit = expirationTime.format('HH:mm:ss').split(':');	   
+		const hours = timeSplit[0];
+		const minutes = timeSplit[1];
+		const seconds = timeSplit[2];	   
+		for (let i=0; i < questionCount; i++) {
+			totalTime.add( { hours : 'hours', minutes : 'minutes' , seconds : 'seconds' } );
+			console.log(totalTime)
+		}
+		return totalTime;
+
 	}
 
 	handleSearch = e => {
@@ -45,6 +66,12 @@ class TestAssignment extends Component {
 		let dataParam = param ;
 		dataParam.testStartTime =  param.testdate ? param.testdate[0] :  param.testdate;
 		dataParam.testEndTime = param.testdate ? param.testdate[1] : param.testdate;
+		const totalTime = this.calculateTotalTime(param.expirationTime , param.questionCount);
+		
+		console.log('Total time',totalTime);		
+
+		
+		console.log('Moments date', param.expirationTime);		
 		Object.assign(param,dataParam);
 		delete dataParam.testdate;
 		console.log('Received values of form: ', dataParam);		
@@ -106,10 +133,10 @@ class TestAssignment extends Component {
 				</Form.Item>
 
 				<Form.Item label="Question count" {...formItemLayout}>
-				{getFieldDecorator('questioncount', {
+				{getFieldDecorator('questionCount', {
 					rules: [{ required: true, message: 'Please input Question count!' }],
 				})(	  
-						<InputNumber min={1}   />
+						<InputNumber min={1} max={this.state.totalQuestion}  />
 				)}
 				</Form.Item>
 
