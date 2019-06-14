@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.foryou.moodleconduct.dao.entity.TestAssignment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -15,6 +17,14 @@ public interface TestAssignmentRepository extends JpaRepository<TestAssignment, 
 	public TestAssignment findByStatus(String status);
 	
 	public boolean existsByUserAuthorityInfoIdAndQuestionBankIdAndStatusIn(Long userAuthId,Long questionBankId, List<String> statusList);
+	
+	@Modifying( clearAutomatically = true )
+	@Query(value="UPDATE vexamine_moodle_test_assignment SET status = 'Expired' , expired = true WHERE id IN (?1) AND status = 'New' ",nativeQuery = true)
+	public void updateExpiredStatus(List<Long> assigneeList);
+	
+/*	public List<TestAssignment> findAllByIdAndStatus(List<Long> assigneeList,String staus);
+*/
+
 
 	
 }
