@@ -4,10 +4,13 @@ package org.foryou.moodleconduct.service;
 
 
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.foryou.moodleconduct.dao.entity.QuestionBank;
 import org.foryou.moodleconduct.dao.entity.TestAssignment;
 import org.foryou.moodleconduct.dao.entity.UserAuthorityInfo;
@@ -32,6 +35,9 @@ public class TestAssignmentService {
 
 	@Autowired
 	private UserAuthorityInfoRepository userAuthorityInfoRepo;
+	
+	@Autowired
+	private ScheduleExecutorService scheduleExecutorService;
 
 	public TestAssignment addTestAssignment(TestAssignmentVo testAssignmentVo ) {		
 		String sessionUser = null;
@@ -44,6 +50,10 @@ public class TestAssignmentService {
 		}
 		QuestionBank questionBank = QuestionBank.builder().id(testAssignmentVo.getQuestionBankId()).build();
 		UserAuthorityInfo userAuthorityInfo =  userAuthorityInfoRepo.findByUserCredentialsId(testAssignmentVo.getUserAuthId());
+		
+		testAssignmentVo.setTestStartTime(new Timestamp(System.currentTimeMillis()));
+		testAssignmentVo.setTestEndTime(new Timestamp(DateUtils.addMinutes(new Date(System.currentTimeMillis()) ,2).getTime()));
+	
 		TestAssignment testAssignment = TestAssignment.builder()
 				.createUser(sessionUser).updateUser(sessionUser)
 				.status(StatusType.NEW.getType())
@@ -51,10 +61,12 @@ public class TestAssignmentService {
 				.userAuthorityInfo(userAuthorityInfo)
 				.build();
 		BeanUtils.copyProperties(testAssignmentVo, testAssignment);
-		return testAssignmentRepository.save(testAssignment);
+		TestAssignment result = testAssignmentRepository.save(testAssignment);
+		scheduleExecutorService.schedule(result.getTestStartTime(), result.getTestEndTime(), Arrays.asList(result.getId()));
+		return result;
 
 	}
-	
+
 	private boolean checkTestAssignmentExists(TestAssignmentVo testAssignmentVo) {
 		return testAssignmentRepository
 				.existsByUserAuthorityInfoIdAndQuestionBankIdAndStatusIn
@@ -75,6 +87,10 @@ public class TestAssignmentService {
 	public TestAssignment getByTestStatus(String status) {
 		return testAssignmentRepository.findByStatus(status);
 	}	
+
+	public void updateExpiredStatus(List<Long> assigneeListList) {
+		testAssignmentRepository.updateExpiredStatus(assigneeListList);
+	}
 
 	public void deleteTestAssignment(Long id) {
 		testAssignmentRepository.deleteById(id);
