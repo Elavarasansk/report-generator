@@ -2,11 +2,12 @@ package org.foryou.moodleconduct.controller;
 
 import java.util.List;
 
-import org.foryou.moodleconduct.dao.entity.TestCategory;
-import org.foryou.moodleconduct.dao.vo.TestCategoryVo;
-import org.foryou.moodleconduct.service.TestCategoryService;
+import org.foryou.moodleconduct.dao.entity.TestResult;
+import org.foryou.moodleconduct.dao.vo.TestResultVo;
+import org.foryou.moodleconduct.service.TestResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,35 +15,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/test/category")
-public class TestCategoryController {
+@RequestMapping("/test/result")
+public class TestResultController {
 
 	@Autowired
-	private TestCategoryService testCategoryService;
+	private TestResultService testResultService;
 
 	@PostMapping("/add")
-	public TestCategory addCategory(@RequestBody TestCategoryVo testCategoryVo ){
-		return testCategoryService.addCategory(testCategoryVo);
+	public TestResult addTestReult(@RequestBody TestResultVo testResultVo){
+		return testResultService.addTestReult(testResultVo);
 	}
 
-	@PostMapping("/find/category")
-	public List<TestCategory> searchCategory(@RequestBody TestCategoryVo testCategoryVo ){
-		return testCategoryService.searchCategory(testCategoryVo);
+	@PostMapping("/add/all")
+	public List<TestResult> addTestReultList(@RequestBody List<TestResultVo> testResultVoList){
+		return testResultService.addTestReultList(testResultVoList);
 	}
 
-	@PostMapping("/find/subcategory")
-	public List<TestCategory> searchSubCategory(@RequestBody TestCategoryVo testCategoryVo ){
-		return testCategoryService.searchSubCategory(testCategoryVo);
-	}	
-
-	@PostMapping("/find/subcategory/name")
-	public List<TestCategory> searchSubCategoryByName(@RequestBody TestCategoryVo testCategoryVo ){
-		return testCategoryService.searchSubCategoryByName(testCategoryVo);
+	@GetMapping("/assignment/{assignId}")
+	public List<TestResult> getByAssignmentId(@PathVariable(value="assignId") long assignId){
+		return testResultService.getByAssignmentId(assignId);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public void  deleteCategory(@PathVariable(value="id") long id){
-		testCategoryService.deleteCategory(id);
+	public void  deleteTestResult(@PathVariable(value="id") long id){
+		testResultService.deleteTestResult(id);
 	}
 
 
