@@ -1,6 +1,7 @@
 package org.foryou.moodleconduct.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.foryou.moodleconduct.dao.entity.QuestionAnswer;
 import org.foryou.moodleconduct.dao.vo.QuestionAnswerVo;
@@ -25,33 +26,56 @@ public class QuestionAnswerController {
 	public QuestionAnswer addQuestionAnswer(@RequestBody QuestionAnswerVo questionAnswerVo){
 		return questionAnswerService.addQuestionAnswer(questionAnswerVo);
 	}
-	
+
 	@PostMapping("/add/all")
 	public List<QuestionAnswer> addAllQuestionAnswer(@RequestBody List<QuestionAnswerVo> questionAnswerVoList){
 		return questionAnswerService.addAllQuestionAnswer(questionAnswerVoList);
 	}
-	
-	@GetMapping("/find/{questionBankId}")
-	public List<QuestionAnswer> getAllQuestionAnswer(@PathVariable(value = "questionBankId") long questionBankId ){
-		return questionAnswerService.getByQuestionBankId(questionBankId);
-	}
 
-	@PostMapping("/find/all")
-	public List<QuestionAnswer> getAllQuestionAnswer(){
-		return questionAnswerService.getAllQuestionAnswer();
-	}
-
-	
 	@DeleteMapping("/delete/{id}")
 	public void  deleteQuestionAnswer(@PathVariable(value="id") long id){
 		questionAnswerService.deleteQuestionAnswer(id);
 	}
-	
+
 	@DeleteMapping("/delete/question/bank/{id}")
 	public void  deleteByQuestionBankId(@PathVariable(value="id") long id){
 		questionAnswerService.deleteByQuestionBankId(id);
 	}
 
+	@PostMapping("/update")
+	public QuestionAnswer updateQuestionAnswer(@RequestBody QuestionAnswerVo questionAnswerVo){
+		return questionAnswerService.updateQuestionAnswer(questionAnswerVo);
+	}
+
+	@PostMapping("/update/all")
+	public List<QuestionAnswer> updateAllQuestionAnswer(@RequestBody List<QuestionAnswerVo> questionAnswerVoList){
+		return questionAnswerService.updateAllQuestionAnswer(questionAnswerVoList);
+	}	
+
+	@GetMapping("/count")
+	public long getByQuestionBank(){
+		return questionAnswerService.getQuestionAnswerCount();
+	}
+
+	@GetMapping("/count/{questionBankId}")
+	public long getCountByQuestionBank(@PathVariable(value="questionBankId") Long questionBankId){
+		return questionAnswerService.getCountByQuestionBank(questionBankId);
+	}
+
+	@PostMapping("/find/question/bank")
+	public List<QuestionAnswer> getByQuestionBank(@RequestBody QuestionAnswerVo questionAnswerVo){
+		return questionAnswerService.getByQuestionBank(questionAnswerVo);
+	}
+
+	@PostMapping("/find")
+	public Map<String, Object> searchQuestionAnswer(@RequestBody QuestionAnswerVo questionAnswerVo){
+		return questionAnswerService.searchQuestionAnswer(questionAnswerVo);
+	}
+
+	@PostMapping("/find/all")
+	public Map<String, Object> getAllQuestionAnswer(@RequestBody QuestionAnswerVo questionAnswerVo){
+		return questionAnswerService.getAllQuestionAnswer(questionAnswerVo);
+	}
 
 
 }
