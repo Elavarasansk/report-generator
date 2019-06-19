@@ -1,12 +1,14 @@
 package org.foryou.moodleconduct.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.foryou.moodleconduct.dao.entity.QuestionBank;
 import org.foryou.moodleconduct.dao.vo.QuestionBankVo;
 import org.foryou.moodleconduct.service.QuestionBankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,25 +27,36 @@ public class QuestionBankController {
 		return questionBankService.addQuestionBank(questionBankVo);
 	}
 
+	@DeleteMapping("/delete/{id}")
+	public void  deleteQuestionBank(@PathVariable(value="id") long id){
+		questionBankService.deleteQuestionBank(id);
+	}	
+
+	@GetMapping("/count")
+	public long getQuestionBankCount(){
+		return questionBankService.getQuestionBankCount();
+	}
+
 	@PostMapping("/find/all")
-	public List<QuestionBank> getAllQuestionBank(){
-		return questionBankService.getAllQuestionBank();
+	public Map<String, Object> getAllQuestionBank(@RequestBody QuestionBankVo questionBankVo){
+		return questionBankService.getAllQuestionBank(questionBankVo);
+	}
+
+	@GetMapping("/find/{id}")
+	public QuestionBank  deleteCategory(@PathVariable(value="id") long id){
+		return questionBankService.getQuestionBank(id);
 	}
 
 	@PostMapping("category/search")
-	public List<QuestionBank> searchQuestionBank(@RequestBody QuestionBankVo questionBankVo){
-		return questionBankService.searchQuestionBank(questionBankVo);
+	public List<QuestionBank> searchQuestionBankByCategory(@RequestBody QuestionBankVo questionBankVo){
+		return questionBankService.searchQuestionBankByCategory(questionBankVo);
 	}
-	
+
 	@PostMapping("name/search")
 	public List<QuestionBank> searchQuestionBankByName(@RequestBody QuestionBankVo questionBankVo){
 		return questionBankService.searchQuestionBankByName(questionBankVo);
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public void  deleteQuestionBank(@PathVariable(value="id") long id){
-		questionBankService.deleteQuestionBank(id);
-	}
 
 
 
