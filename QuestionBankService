@@ -1,15 +1,22 @@
 package org.foryou.moodleconduct.service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.foryou.moodleconduct.constants.MooduleConductConstants;
 import org.foryou.moodleconduct.dao.entity.QuestionBank;
 import org.foryou.moodleconduct.dao.repository.QuestionBankRepo;
 import org.foryou.moodleconduct.dao.vo.QuestionBankVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,34 +36,51 @@ public class QuestionBankService {
 		return questionBankRepo.save(questionBank);
 	}
 
-	public List<QuestionBank> searchQuestionBank(QuestionBankVo questionBankVo) {	
-		Optional<List<QuestionBank>> questionBankList = questionBankRepo.
-				findByTestCategoryIdAndQuestionBankNameContainingIgnoreCase(questionBankVo.getCategoryId(),questionBankVo.getQuestionBankName()); 
-		return questionBankList.isPresent() ? questionBankList.get() : Collections.emptyList();
+	public long getQuestionBankCount() {	
+		return questionBankRepo.count();
 	}
-	
+
+	public void  deleteQuestionBank(Long id) {	
+		questionBankRepo.deleteById(id);
+	}
+
+	public List<QuestionBank> searchQuestionBankByCategory(QuestionBankVo questionBankVo) {	
+		Pageable pageable = PageRequest.of(MooduleConductConstants.INITIAL, questionBankVo.getSuggestLimit());
+		Optional<List<QuestionBank>> questionBankList = questionBankRepo.
+				findByTestCategoryIdAndQuestionBankNameContainingIgnoreCase(questionBankVo.getCategoryId(),questionBankVo.getQuestionBankName(),pageable); 
+		return questionBankList.isPresent()  ? questionBankList.get() : Collections.emptyList();
+	}
+
 	public List<QuestionBank> searchQuestionBankByName(QuestionBankVo questionBankVo) {	
+		Pageable pageable = PageRequest.of(MooduleConductConstants.INITIAL, questionBankVo.getSuggestLimit());
 		Optional<List<QuestionBank>> questionBankList = questionBankRepo.
-				findByQuestionBankNameContainingIgnoreCase(questionBankVo.getQuestionBankName()); 
+				findByQuestionBankNameContainingIgnoreCase(questionBankVo.getQuestionBankName(),pageable); 
 		return questionBankList.isPresent() ? questionBankList.get() : Collections.emptyList();
 	}
-	
-	public List<QuestionBank> getAllQuestionBank() {	
-		return questionBankRepo.findAll();
+
+	public Map<String, Object> getAllQuestionBank(QuestionBankVo questionBankVo) {	
+		Pageable pageable = PageRequest.of(questionBankVo.getOffset(), questionBankVo.getOffset(),Sort.by(MooduleConductConstants.QUESTION_BANK_NAME));
+		Page<QuestionBank> page = questionBankRepo.findAll(pageable) ; 
+		Map<String,Object > resultMap = new HashMap<>();
+		resultMap.put(MooduleConductConstants.VALUE, page.getContent());
+		resultMap.put(MooduleConductConstants.COUNT, page.getTotalElements());
+		return resultMap;
 	}
 
 	public QuestionBank getQuestionBank(Long id) {	
-		Optional<QuestionBank> questionBank = questionBankRepo.findById(id) ; 
-		return questionBank.isPresent() ? questionBank.get() : null;
+		Optional<QuestionBank> questionBankList = questionBankRepo.findById(id) ; 
+		return questionBankList.isPresent() ? questionBankList.get() : null;
+	}
+
+	public List<QuestionBank> getQuestionBankList(List<String> questionList) {	
+		Optional<List<QuestionBank>> questionBankList = questionBankRepo.findByQuestionBankNameIn(questionList) ; 
+		return questionBankList.isPresent() ? questionBankList.get() : null;
 	}
 
 	private boolean checkQuestionBankNameExists(QuestionBankVo questionBankVo) {	
 		return questionBankRepo.existsByQuestionBankNameContainingIgnoreCase(questionBankVo.getQuestionBankName());
 	}
 
-	public void  deleteQuestionBank(Long id) {	
-		questionBankRepo.deleteById(id);
-	}
 
 
 
