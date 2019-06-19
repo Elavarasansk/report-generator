@@ -8,14 +8,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+import org.foryou.moodleconduct.constants.MooduleConductConstants;
 import org.foryou.moodleconduct.dao.entity.TestCategory;
 import org.foryou.moodleconduct.dao.repository.TestCategoryRepo;
 import org.foryou.moodleconduct.dao.vo.TestCategoryVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 
 @Service
@@ -23,7 +26,6 @@ public class TestCategoryService {
 
 	@Autowired
 	private TestCategoryRepo testCategoryRepo;
-
 
 	public TestCategory addCategory(TestCategoryVo testCategoryVo ) {
 		if(checkCategoryExists(testCategoryVo)) {
@@ -37,30 +39,46 @@ public class TestCategoryService {
 		return testCategoryRepo.save(testCategory);
 	}
 
+	public long getCategoryCount() {
+		return testCategoryRepo.count();
+	}	
+
+	public void deleteCategory(Long id) {
+		testCategoryRepo.deleteById(id);
+	}	
+
+	public List<TestCategory> searchCategory(TestCategoryVo testCategoryVo ) {	
+		if( StringUtils.isEmpty(testCategoryVo.getCategory())) {
+			return Collections.emptyList();
+		}
+		Pageable pageable = PageRequest.of(MooduleConductConstants.INITIAL, testCategoryVo.getSuggestLimit());		
+		Optional<List<TestCategory>> searchList = testCategoryRepo.findByCategoryContainingIgnoreCase(testCategoryVo.getCategory(),pageable); 
+		return searchList.isPresent() ? searchList.get() : Collections.emptyList();
+	}
+
+	public  List<TestCategory> searchSubCategory(TestCategoryVo testCategoryVo ) {
+		if( StringUtils.isEmpty(testCategoryVo.getSubCategory())) {
+			return Collections.emptyList();
+		}
+		Pageable pageable = PageRequest.of(MooduleConductConstants.INITIAL, testCategoryVo.getSuggestLimit());
+		 Optional<List<TestCategory>> searchList = testCategoryRepo.findByCategoryAndSubCategoryContainingIgnoreCase(testCategoryVo.getCategory(),testCategoryVo.getSubCategory(),pageable);
+		return searchList.isPresent() ? searchList.get() : Collections.emptyList();
+	}
+
+	public  List<TestCategory> searchSubCategoryByName(TestCategoryVo testCategoryVo ) {
+		if( StringUtils.isEmpty(testCategoryVo.getCategory()) || StringUtils.isEmpty(testCategoryVo.getSubCategory())) {
+			return Collections.emptyList();
+		}
+		Pageable pageable = PageRequest.of(MooduleConductConstants.INITIAL, testCategoryVo.getSuggestLimit());
+		Optional<List<TestCategory>> searchList  =  testCategoryRepo.findBySubCategoryContainingIgnoreCase(testCategoryVo.getSubCategory(),pageable); 
+		return searchList.isPresent() ? searchList.get() : Collections.emptyList();
+
+	}	
+
 	private boolean checkCategoryExists(TestCategoryVo testCategoryVo ) {
 		return testCategoryRepo
 				.existsByCategoryContainingIgnoreCaseAndSubCategoryContainingIgnoreCase
 				(testCategoryVo.getCategory(), testCategoryVo.getSubCategory());
-	}
-
-	public List<TestCategory> searchCategory(TestCategoryVo testCategoryVo ) {		
-		Optional<List<TestCategory>> searchList = testCategoryRepo.findByCategoryContainingIgnoreCase(testCategoryVo.getCategory()); 
-		return searchList.isPresent() ? searchList.get() : Collections.emptyList(); 
-	}
-
-	public  List<TestCategory> searchSubCategory(TestCategoryVo testCategoryVo ) {
-		Optional<List<TestCategory>> searchList = testCategoryRepo.findByCategoryAndSubCategoryContainingIgnoreCase(testCategoryVo.getCategory(),testCategoryVo.getSubCategory());
-		return searchList.isPresent() ? searchList.get() : Collections.emptyList() ; 
-	}
-
-	public  List<TestCategory> searchSubCategoryByName(TestCategoryVo testCategoryVo ) {
-		Optional<List<TestCategory>> searchList =  testCategoryRepo.findBySubCategoryContainingIgnoreCase(testCategoryVo.getSubCategory()); 
-		return searchList.isPresent() ? searchList.get() : Collections.emptyList() ; 
-
-	}
-
-	public void deleteCategory(Long id) {
-		testCategoryRepo.deleteById(id);
 	}
 
 }
