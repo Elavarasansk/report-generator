@@ -35,7 +35,7 @@ class CategoryInfoContainer extends Component {
         subCategory:'',
         
     }
-  }
+  }https://drive.google.com/file/d/1PLMv_VuTwPcASELuwAaRYLMaDoFoYoW9/view?usp=drivesdk
   
   handleTypeChange = (value) => {
     this.setState({ category : value }, () => {
@@ -206,4 +206,7 @@ function mapStateToProps(state) {
 
 const WrappedCategoryInfoContainer = Form.create()(CategoryInfoContainer);
 export default withRouter(connect(null)(WrappedCategoryInfoContainer));
+
+
+
 
