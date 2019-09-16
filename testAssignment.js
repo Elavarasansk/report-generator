@@ -283,5 +283,5 @@ function mapStateToProps(state) {
 	    searchCandidate: state.get('manager').toJS().searchCandidate,
 
   };https://drive.google.com/file/d/1KJpTr34M1t8eJe_fD3AMrqtXlrvh77oa/view?usp=drivesdk
-}
+}https://drive.google.com/file/d/1KJpTr34M1t8eJe_fD3AMrqtXlrvh77oa/view?usp=drivesdk
 export default withRouter(connect(mapStateToProps)(TestAssignment));
