@@ -1,5 +1,8 @@
 
 
+
+/api/Contents?filter={ "where" : { "user_id" : "a74c33bc-d6b2-461a-934c-c0109e0bb072" } , "include" :  [    { "relation" : "contentType" } ,  { "relation" : "membership" }  , { "relation" : "votes" ,  "scope" : { "where" :  { "user_id" : "a74c33bc-d6b2-461a-934c-c0109e0bb072"} } } ] }&access_token=0f4068ZmD4P8LcLa1Bxm6CSF36SiU6MXV8YBiDLFxT5xujKFf1EgbZdwhQCEwc1I
+
 // Use this code snippet in your app.
 // If you need more information about configurations or implementing the sample code, visit the AWS docs:
 // https://aws.amazon.com/developers/getting-started/nodejs/
