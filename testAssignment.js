@@ -1,3 +1,63 @@
+const configPath = require('../aws.config.json');
+const SECRETS_MANAGER =  configPath.SECRETS_MANAGER.CREDENTIALS;
+const AWS = require('aws-sdk');
+let response = {};
+let client = new AWS.SecretsManager({ region :  'ap-south-1' } );
+
+
+client.getSecretValue({SecretId: 'test/postgres' , VersionId : '2f8d8ed6-ec11-4f6d-a954-65fa7c97fdcc' , VersionStage : 'AWSCURRENT' }, function(err, data) {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        if ('SecretString' in data) {
+            let secret = data.SecretString;
+            secret = JSON.parse(secret);
+            response.user = secret.username;
+            response.password = secret.password;
+            response.host = secret.host;
+            response.database = constants.db.database;
+            console.log('response..',response);
+            callback(null, response);
+        } else {
+            let buff = new Buffer(data.SecretBinary, 'base64');
+            let decodedBinarySecret = buff.toString('ascii');
+            callback(null, decodedBinarySecret);
+        }
+    }
+    });
+
+
+{ Error: connect ENETUNREACH 169.254.169.254:80
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1106:14)
+  message: 'Missing credentials in config',
+  errno: 'ENETUNREACH',
+  code: 'CredentialsError',
+  syscall: 'connect',
+  address: '169.254.169.254',
+  port: 80,
+  time: 2020-01-09T09:34:10.702Z,
+  originalError:
+   { message: 'Could not load credentials from any providers',
+     errno: 'ENETUNREACH',
+     code: 'CredentialsError',
+     syscall: 'connect',
+     address: '169.254.169.254',
+     port: 80,
+     time: 2020-01-09T09:34:10.702Z,
+     originalError:
+      { message: 'EC2 Metadata roleName request returned error',
+        errno: 'ENETUNREACH',
+        code: 'ENETUNREACH',
+        syscall: 'connect',
+        address: '169.254.169.254',
+        port: 80,
+        time: 2020-01-09T09:34:10.702Z,
+        originalError: [Object] } } }
+
+
+
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
