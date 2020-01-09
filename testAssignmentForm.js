@@ -1,5 +1,43 @@
 
 
+import psycopg2
+import boto3
+import json
+session = boto3.session.Session()
+client = session.client(
+    service_name='secretsmanager',
+    region_name='ap-south-1'
+)
+secret = client.get_secret_value(
+         SecretId='test/postgres'
+)
+secret_dict = json.loads(secret['SecretString'])
+
+username = secret_dict['username']
+passw = secret_dict['password']
+
+conn = psycopg2.connect(host="chillupp-db.czeip4scqlfl.ap-south-1.rds.amazonaws.com",port='5432',database="chillupp", user=username, password=passw)
+def handler(event, context):
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM users")
+            print(cursor.fetchall())
+    except psycopg2.Error as e:
+        print(e)    
+
+In aws cli, I used the following command to get secret
+aws secretsmanager get-secret-value --secret-id test/postgres
+And this is the output.
+{
+    "ARN": "arn:aws:secretsmanager:ap-south-1:882528344673:secret:test/postgres-p1jgM2",
+    "Name": "test/postgres",
+    "VersionId": "2f8d8ed6-ec11-4f6d-a954-65fa7c97fdcc",
+    "SecretString": "{\"username\":\"qazxdr\",\"password\":\"1a8nJ7v8zQnumGF4BN22\",\"engine\":\"postgres\",\"host\":\"chillupp-db.czeip4scqlfl.ap-south-1.rds.amazonaws.com\",\"port\":5432,\"dbname\":\"chillupp\",\"dbInstanceIdentifier\":\"chillupp-db\"}",
+    "VersionStages": [
+        "AWSCURRENT"
+    ],
+    "CreatedDate": 1578305381.147
+}
 
 /api/Contents?filter={ "where" : { "user_id" : "a74c33bc-d6b2-461a-934c-c0109e0bb072" } , "include" :  [    { "relation" : "contentType" } ,  { "relation" : "membership" }  , { "relation" : "votes" ,  "scope" : { "where" :  { "user_id" : "a74c33bc-d6b2-461a-934c-c0109e0bb072"} } } ] }&access_token=0f4068ZmD4P8LcLa1Bxm6CSF36SiU6MXV8YBiDLFxT5xujKFf1EgbZdwhQCEwc1I
 
