@@ -1,5 +1,14 @@
 
 
+The following are the details to access AWS console.
+User name: Vairavan
+Password: 9yspZI(x3Jhi
+Console login link: https://882528344673.signin.aws.amazon.com/console
+I have given access to EC2 instance. Please let me know if you require any further access.
+
+Regards,
+Sukanya
+
 import psycopg2
 import boto3
 import json
