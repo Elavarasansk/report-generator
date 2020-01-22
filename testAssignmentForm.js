@@ -1,5 +1,105 @@
 
 
+{
+  "responseBody": {
+    "status": 200,
+    "message": "SUCCESS",
+    "count": "2",
+    "result": [
+      {
+        "id": "08103df4-5539-44bf-b442-0d4a27a7e627",
+        "file_name": "movie.mp4",
+        "file_size": "318465",
+        "content_title": "movie",
+        "is_active": true,
+        "is_artistic": false,
+        "uploaded_time": "2020-01-02T06:28:52.585Z",
+        "status": null,
+        "user_id": "54ea92c5-2d5e-4989-9157-c087a8d86304",
+        "schedule_id": "33f25853-4e5c-401b-a638-a7923e057667",
+        "language_id": null,
+        "state_id": null,
+        "content_type_id": "56f88972-4111-4735-87a7-ef08a7aaa04f",
+        "district_id": null,
+        "membership_id": "c4cabda0-89f7-42fc-a72f-04985a60e44d",
+        "talent_id": null,
+        "membership": {
+          "id": "c4cabda0-89f7-42fc-a72f-04985a60e44d",
+          "name": "UP"
+        },
+        "contentType": {
+          "id": "56f88972-4111-4735-87a7-ef08a7aaa04f",
+          "name": "VIDEO"
+        },
+        "schedule": {
+          "id": "33f25853-4e5c-401b-a638-a7923e057667",
+          "end_date": "2020-01-26T11:30:00.000Z"
+        },
+        "votes": {
+          "positive": 0,
+          "negative": 0,
+          "warning": 0,
+          "share": 0,
+          "score": 0,
+          "user_id": "54ea92c5-2d5e-4989-9157-c087a8d86304"
+        },
+        "users": {
+          "id": "54ea92c5-2d5e-4989-9157-c087a8d86304",
+          "profile_name": null,
+          "profile_image": null,
+          "contact_card": null
+        }
+      },
+      {
+        "id": "103c96ec-9d1b-434d-846a-a1e32fb8012f",
+        "file_name": "movie1.mp4",
+        "file_size": "318465",
+        "content_title": "movie1",
+        "is_active": true,
+        "is_artistic": false,
+        "uploaded_time": "2020-01-02T06:29:02.036Z",
+        "status": null,
+        "user_id": "54ea92c5-2d5e-4989-9157-c087a8d86304",
+        "schedule_id": "33f25853-4e5c-401b-a638-a7923e057667",
+        "language_id": null,
+        "state_id": null,
+        "content_type_id": "56f88972-4111-4735-87a7-ef08a7aaa04f",
+        "district_id": null,
+        "membership_id": "c4cabda0-89f7-42fc-a72f-04985a60e44d",
+        "talent_id": null,
+        "membership": {
+          "id": "c4cabda0-89f7-42fc-a72f-04985a60e44d",
+          "name": "UP"
+        },
+        "contentType": {
+          "id": "56f88972-4111-4735-87a7-ef08a7aaa04f",
+          "name": "VIDEO"
+        },
+        "schedule": {
+          "id": "33f25853-4e5c-401b-a638-a7923e057667",
+          "end_date": "2020-01-26T11:30:00.000Z"
+        },
+        "votes": {
+          "id": "afbd23f4-f1a7-4714-ad8b-d477c218f6b3",
+          "positive": 1,
+          "negative": 2,
+          "warning": 3,
+          "share": 1,
+          "user_id": "54ea92c5-2d5e-4989-9157-c087a8d86304",
+          "content_id": "103c96ec-9d1b-434d-846a-a1e32fb8012f",
+          "removal_condition_id": null
+        },
+        "users": {
+          "id": "54ea92c5-2d5e-4989-9157-c087a8d86304",
+          "profile_name": null,
+          "profile_image": null,
+          "contact_card": null
+        }
+       }
+	   ]
+	  }
+}
+
 The following are the details to access AWS console.
 User name: Vairavan
 Password: 9yspZI(x3Jhi
