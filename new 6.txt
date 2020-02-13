@@ -27,7 +27,7 @@ We highly recommend Trio Development team to follow the below procedures before 
 Note :
    **** PLEASE DO NOT COMMIT DIRECTLY TO MASTER BRANCH *****
    
-If the above suggestions are not to be followed properly, it might lead to N-number of issues and workaround which might cause serious impact on Product quality in near future.
+If the above suggestions are not to be followed properly, it might lead to N-number of issues and workaround for which the root cause might difficult to identify and highly probable to occur in the future.
    
 If the above suggestions are followed properly , if there are issues occurring during the release of the product it would be easy to revert to the working state of the branch and maintain 
 the application uninterrupted and avoid those unfortunate that occurred today.
