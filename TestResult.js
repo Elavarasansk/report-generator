@@ -1,3 +1,26 @@
+
+
+
+
+Hi Trio team ,
+
+We were working on the IOS Deeplink for the past 3 days and finally we came to the solution.
+
+While Validating the AASA(Apple App Site Association) Validator it throws an error "Domain is not valid".
+Kindly refer the validator link below and refer the attachment for more detailed explanation.
+
+https://branch.io/resources/aasa-validator/
+
+We have completed & deployed  AASA configuration in Web-server.
+Once a valid domain is hosted, we will be able to work with the IOS deeplink and fix the issues if there are any.
+
+Kindly do the needful.
+
+Thanks & Regards ,
+Elavarasan S.
+ForU Technologies & Services.
+
+
 import React, { Component } from 'react';
 import { Input ,Row,Table,Button,Modal} from 'antd';
 import { connect } from 'react-redux';

@@ -1,347 +1,356 @@
-const configPath = require('../aws.config.json');
-const SECRETS_MANAGER =  configPath.SECRETS_MANAGER.CREDENTIALS;
-const AWS = require('aws-sdk');
-let response = {};
-let client = new AWS.SecretsManager({ region :  'ap-south-1' } );
-
-
-client.getSecretValue({SecretId: 'test/postgres' , VersionId : '2f8d8ed6-ec11-4f6d-a954-65fa7c97fdcc' , VersionStage : 'AWSCURRENT' }, function(err, data) {
-    if (err) {
-        console.log(err);
-    }
-    else {
-        if ('SecretString' in data) {
-            let secret = data.SecretString;
-            secret = JSON.parse(secret);
-            response.user = secret.username;
-            response.password = secret.password;
-            response.host = secret.host;
-            response.database = constants.db.database;
-            console.log('response..',response);
-            callback(null, response);
-        } else {
-            let buff = new Buffer(data.SecretBinary, 'base64');
-            let decodedBinarySecret = buff.toString('ascii');
-            callback(null, decodedBinarySecret);
-        }
-    }
-    });
-
-
-{ Error: connect ENETUNREACH 169.254.169.254:80
-    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1106:14)
-  message: 'Missing credentials in config',
-  errno: 'ENETUNREACH',
-  code: 'CredentialsError',
-  syscall: 'connect',
-  address: '169.254.169.254',
-  port: 80,
-  time: 2020-01-09T09:34:10.702Z,
-  originalError:
-   { message: 'Could not load credentials from any providers',
-     errno: 'ENETUNREACH',
-     code: 'CredentialsError',
-     syscall: 'connect',
-     address: '169.254.169.254',
-     port: 80,
-     time: 2020-01-09T09:34:10.702Z,
-     originalError:
-      { message: 'EC2 Metadata roleName request returned error',
-        errno: 'ENETUNREACH',
-        code: 'ENETUNREACH',
-        syscall: 'connect',
-        address: '169.254.169.254',
-        port: 80,
-        time: 2020-01-09T09:34:10.702Z,
-        originalError: [Object] } } }
-
-
-
-
 import React, { Component } from 'react';
+import { AutoComplete,Row,Col,DatePicker,InputNumber,Select,Form,TimePicker,Button,Checkbox,Modal,Tooltip,Icon,Table,Input} from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import TestAssignmentForm from '../components/testAssignmentForm';
-import { Statistic, Input, Row, Table, Button, Icon, Tag, Col, Select, Divider } from 'antd';
-import { searchQuestionBank, searchCandidate } from '../reduxFlow/actions.js';
-import PropTypes from 'prop-types';
-import Highlighter from 'react-highlight-words';
-import { getAllTestAssignment } from '../reduxFlow/actions.js';
 import moment from 'moment';
-import { ROLE } from '../../common/constants/userRoles';
-
+const { RangePicker } = DatePicker;
 const { Option } = Select;
+const confirm = Modal.confirm;
 const Search = Input.Search;
 
-const DATE_FORMAT = 'YYYY-MM-DD, HH:MM:SS a';
 
-
-const statusFilter = [
-  'New',
-  'Inprogress',
-  'Completed',
-  'Expired',
-];
-
-const styles = {
-	    select: {
-	      width: 200,
-	      border: '2px solid',
-	      borderColor: 'royalblue',
-	      borderRadius: 6,
-	      marginRight: 5,
-	      marginBottom: 5,
-	    },
+const formItemLayout = {
+		labelCol: {
+			xs: { span: 24 },
+			sm: { span: 8 },
+		},
+		wrapperCol: {
+			xs: { span: 24 },
+			sm: { span: 16 },
+		},
 };
+
+const tailFormItemLayout = {
+		wrapperCol: {
+			xs: {
+				span: 24,
+				offset: 0,
+			},
+			sm: {
+				span: 16,
+				offset: 8,
+			},
+		},
+};
+
+
+const columns = [
+	{
+		title: 'Name',
+		dataIndex: 'name'
+	}
+	];
+
+const data = [
+	{
+		key: '1',
+		name: 'John Brown',
+	},
+	{
+		key: '2',
+		name: 'Jim Green',
+	},
+	{
+		key: '3',
+		name: 'Joe Black',
+	},
+	{
+		key: '4',
+		name: 'Disabled User',
+	},
+	{
+		key: '5',
+		name: 'Disabled User1',
+	},
+	{
+		key: '6',
+		name: 'Disabled User2',
+	},
+	];
+
+
 
 
 class TestAssignment extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-      limit: 20,
-      offset: 0,
-      pagination: {},
-      visible: false,
-    };
-  }
-	componentDidMount = () => {
-		  const param = {};
-		  const { dispatch } = this.props;
-		  const { limit, offset } = this.state;
-		  Object.assign(param, { limit, offset });
-		  this.fetch(param);
-	};
 
-		searchQuestionBank = async (e) => {
-		  const { dispatch } = this.props;
-		  const { loggedInUser } = this.context;
-		  const param = {};
-		  param.questionBankName = e;
-		  param.suggestLimit = 5;
-		  param.mailId = loggedInUser;
-		  await searchQuestionBank(param, dispatch);
+	constructor(props){
+		super(props);
+		this.state = {
+				open: false,
+				totalQuestion : 5,
+				totalTimeTaken : "00:00:00",
+				questionCount : 0,
+				showCandidateModal : false,
+				candidateList : data,
+				selectedList : [],
+				candidateAssignedList  : [] ,
+
 		};
-
-
-	searchCandidate = async (e) => {
-	  const { dispatch } = this.props;
-	  const param = {};
-	  param.mailId = e;
-	  param.suggestLimit = 5;
-	  param.role = ROLE.CANDIDATE;
-	  await searchCandidate(param, dispatch);
 	}
 
+	showModal = () => {
+		this.setState({
+			showCandidateModal: true,
+		});
+	};
 
-		fetch = async (param) => {
-		  const { dispatch } = this.props;
-		  const { pagination } = this.state;
-		  this.setState({ loading: true });
-		  const data = await getAllTestAssignment(param, dispatch);
-		  pagination.total = data.count;
-		  pagination.current = 0;
-		  this.setState(Object.assign({ loading: false, pagination }, param));
+	showConfirm = () => {
+		confirm({
+			width : 480,
+			title: 'Are you sure do you want to assign the test?',
+			centered : true,
+			onOk() {
+				console.log('OK');
+			},
+			onCancel() {
+				console.log('Cancel');
+			},
+		});
+	}
+
+	calculateTotalTime = (expirationTime, questionCount) => {
+		if(!expirationTime || questionCount <= 0 ){
+			return "00:00:00"
+		}
+		let totalTime = expirationTime.clone();
+		let timeSplit = expirationTime.format('HH:mm:ss').split(':');	   
+		const hours = parseInt(timeSplit[0]) * questionCount;
+		const minutes = parseInt(timeSplit[1]) * questionCount;
+		const seconds = parseInt(timeSplit[2]) * questionCount;	   
+		totalTime.set('hours' , hours );
+		totalTime.set('minutes', minutes );
+		totalTime.set('seconds' , seconds);
+		this.setState( { totalTimeTaken :totalTime } ) ;
+		return totalTime;
+	}
+
+	handleSubmit = e => {
+		e.preventDefault();
+		let param = {} ; 
+		this.props.form.validateFields((err, values) => {
+			if(err){
+				return; 
+			}
+			Object.assign(param,values);
+			let dataParam = param ;
+			dataParam.testStartTime =  param.testdate ? param.testdate[0] :  param.testdate;
+			dataParam.testEndTime = param.testdate ? param.testdate[1] : param.testdate;
+			Object.assign(param,dataParam);
+			delete dataParam.testdate;
+			this.showConfirm();
+		});		
+
+	};
+
+	handleOpenChange = open => {
+		this.setState({ open });
+	};
+
+	handleClose = () => this.setState({ open: false });
+
+	handleReset = () => {
+		this.props.form.resetFields();
+	};
+
+	setAverageTimeTaken = (e) => {
+		const {questionCount } =  this.state ;
+		const totalTimeTaken  =	this.calculateTotalTime(e ,questionCount );
+
+		this.props.form.setFields({
+			totalTimeTaken: {
+				value: totalTimeTaken
+			}
+		});
+		this.setState( { avgTimeTaken : e });
+
+	};
+
+	setQuestionCount = (e) => {
+		const {avgTimeTaken } =  this.state ;
+		const totalTimeTaken  = this.calculateTotalTime(avgTimeTaken , e );		
+		this.props.form.setFields({
+			totalTimeTaken: {
+				value: totalTimeTaken
+			}
+		});
+		this.setState( { questionCount : e });
+
+	};
+
+	handleOk = e => {
+		const { selectedList,candidateAssignedList } = this.state ;  
+		const dataList = candidateAssignedList.concat(selectedList);
+		this.props.form.setFields({
+			candidate: {
+				value: dataList
+			}
+		});		
+
+		this.setState({
+			showCandidateModal: false,
+		});			
+	};
+
+	handleCancel = e => {
+		this.setState({
+			showCandidateModal: false,
+		});
+	};
+
+	searchCandidateList = (value) => {
+		if(value && value.length > 0){
+			const candidateData = data.filter(content => content.name && content.name.toLowerCase().indexOf(value.toLowerCase()) != -1);
+			this.setState({ candidateList : candidateData});
+		}else{
+			this.setState({ candidateList : data});
+		}
+
+	};
+
+	setCandidate = (candidateList) =>{
+		this.setState( {candidateAssignedList : candidateList });
+	};
+
+
+	render() {
+		const { getFieldDecorator } = this.props.form;
+		const   { questionCount , avgTimeTaken,totalTimeTaken,showCandidateModal,candidateList } = this.state ; 
+		const rowSelection = {
+				onChange: (selectedRowKeys, selectedRows) => {
+					const selectedList = selectedRows.map(data=>data.name) ; 
+					this.setState({selectedList : selectedList });
+				}
 		};
+		return (
+				<div>
 
-		handleTableChange = async (pagination, filters, sorter) => {
-		  const { dispatch } = this.props;
-		  const currentPage = pagination.current;
-		  const param = Object.assign(this.state, {
-		    offset: currentPage - 1, limit: 10, sortKey: sorter.columnKey, sortType: sorter.order,
-		  });
-		  const data = await getAllTestAssignment(param, dispatch);
-		  pagination.total = data.count;
-		  this.setState({ pagination, sortKey: sorter.columnKey, sortType: sorter.order });
-		};
+				<Form  onSubmit={this.handleSubmit} >
+				<p style={{ marginBottom : 50 , marginTop : 50,  textAlign : 'center' }} ><font size="6"><b>Test Assignment</b></font></p>
+				<Modal
+				title="Candidate List"
+					visible={showCandidateModal}
+				onOk={this.handleOk}
+				onCancel={this.handleCancel} >
+				<Row >
+				<Col>
+				<Search enterButton 
+				placeholder="Search name"
+					onSearch={value => this.searchCandidateList(value)}
+				style={{ width: 260 }}	/>
+				</Col>
+				</Row>
 
-		setTableData = () => {
-		  const { dataList } = this.props;
-		  if (!dataList || dataList.length == 0) {
-		    return [];
-		  }
-		  const returnList = dataList.map(candidate => (Object.assign({
-		    mailId: candidate.userAuthorityInfo.userCredentials.mailId,
-			 questionBankName: candidate.questionBank.questionBankName,
-		  }, candidate)));
-		  return returnList;
-		}
-
-		closeTestAssignment = () => {
-		  this.setState({ visible: false });
-		}
-
-		reloadTestAssignment = async () => {
-		  this.setState({ visible: false });
-		            await this.fetch(this.state);
-		}
+				<Row style={{ marginTop : 16 }}>
+				<Col>
+				<Table rowSelection={rowSelection} columns={columns} dataSource={candidateList} />
+				</Col>
+				</Row>
+				</Modal>
 
 
-		handleFilterChange = async (type, name, value) => {
-	      const dataMap = {};
-	      dataMap[name] = value;
-	      this.setState(dataMap);
-		  const param = Object.assign(this.state, { offset: 0, limit: 20 }, dataMap);
-		  await this.fetch(param);
-		}
+				<Form.Item label="Question Bank" {...formItemLayout}>
+				{getFieldDecorator('questionBank', {
+					rules: [{ required: true, message: 'Please input Question Bank!' }],
+				})(
+						<AutoComplete style={{ width: 200 }} />
+				)}
+				</Form.Item>
 
-		render() {
-			  const columns = [
-		    {
-		      title: 'Candidate',
-		      dataIndex: 'mailId',
-		    },
-		    {
-		      title: 'Question Bank',
-		      dataIndex: 'questionBankName',
-		    },
-		    {
-		      title: 'Questions Count',
-		      dataIndex: 'questionsCount',
-		       align: 'right',
-		    }, {
-		      title: 'Invite Sent',
-		      dataIndex: 'inviteSent',
-		       render: row => (<span> {row ? <Icon type="check" /> : <Icon type="close" /> } </span>),
-		       align: 'center',
-		       sorter: true,
-		     },
-		    {
-		      title: 'Start Time',
-		      dataIndex: 'testStartTime',
-		      render: testStartTime => (<span>{moment(testStartTime).format(DATE_FORMAT)}</span>),
-		      sorter: true,
-		    },
-		    {
-		      title: 'End Time',
-		      dataIndex: 'testEndTime',
-		      render: testEndTime => (<span>{moment(testEndTime).format(DATE_FORMAT)}</span>),
-		      	sorter: true,
-		    },
-		    {
-		      title: 'Status',
-		      dataIndex: 'status',
-		       render: (status) => {
-		      		switch (status) {
-		          case 'New':
-		            return (<span><Tag color="blue">{status}</Tag></span>);
-		          case 'Inprogress':
-		            return (<span><Tag color="red">{status}</Tag></span>);
-		          case 'Submitted':
-		          case 'Completed':
-		            return (<span><Tag color="green">{status}</Tag></span>);
-		          case 'Expired':
-		            return (<span><Tag color="#bfbfbf">{status}</Tag></span>);
-		          default:
-		            return (<span />);
-		        }
-		     },
-		     },
-		  ];
+				<Form.Item label="Candidate" {...formItemLayout}>
+				<Row gutter={8} justify="start" type="flex">                
+				<Col>
+				{getFieldDecorator('candidate', {
+					rules: [{ required: true, message: 'Please input Candidate!' }],
+				})(
+						<Select mode="tags" maxTagCount={5} style={{ width: '400px' }} onChange = { e => this.setCandidate(e)}>
+						</Select>
+				)}
+				</Col>
+				<Col >
+				<Button  shape="circle" icon="info" onClick={this.showModal} />
+				</Col>				
+				</Row>				
+				</Form.Item>		
+				<Form.Item label="Test Date" {...formItemLayout}>
+				{getFieldDecorator('testdate', {
+					rules: [{ required: true, message: 'Please input Test Date!' }],
+				})(	        		  
+						<RangePicker
+						showTime={{ format: 'HH:mm' }}
+						format="YYYY-MM-DD HH:mm"
+							placeholder={['Start Time', 'End Time']}
+						/>
+				)}
+				</Form.Item>
+				<Form.Item label="Question count" {...formItemLayout}>
+				{getFieldDecorator('questionCount', {
+					rules: [{ required: true, message: 'Please input Question count!' }],
+				})(	  
+						<InputNumber min={1} max={this.state.totalQuestion} 
+						onChange={e => this.setQuestionCount(e) }  />
+				)}
+				</Form.Item>
+				<Form.Item label="Time taken for each question" {...formItemLayout}>
+				<Row>				
+				<Col span={3} >	
+				{getFieldDecorator('avgTimeTaken', {
+					rules: [{ required: true, message: 'Please input Avg Time Taken!' }],
+				})(	 
+						<TimePicker 
+						open={this.state.open}
+						onOpenChange={this.handleOpenChange}
+						onChange={e => this.setAverageTimeTaken(e) }
+						/>
+				)}
+				</Col>				
+				<Col span={8}>
+				{  questionCount > 0 && avgTimeTaken
+					&& <Form.Item label="Total Time Taken" {...formItemLayout}>
+				{getFieldDecorator('totalTimeTaken', {
+					rules: [{ required: false }],
+				})(	 
+						<TimePicker placeholder="Total Time" value={moment(totalTimeTaken, 'HH:mm:ss')} disabled />
+				)}
+				</Form.Item>
+				}
+				</Col>					
+				</Row>	
 
-		  const {
-		    dataList, total, searchQuestionBank, searchCandidate,
-		  } = this.props;
+				</Form.Item>
 
-		  return (
-  <div>
-     { this.state.visible && <TestAssignmentForm closeTestAssignment={this.closeTestAssignment.bind(this)} reloadTestAssignment={this.reloadTestAssignment.bind(this)} onRef={ref => (this.child = ref)} /> }
 
-    <Row type="flex" justify="start" style={{ marginTop: 24 }}>
+				<Form.Item {...tailFormItemLayout}>
+				{getFieldDecorator('mailsend', {
+					valuePropName: 'checked',
+				})(
+						<Checkbox>
+						Send mail to the assigned candidates.
+						</Checkbox>,
+				)}
+				</Form.Item>
 
-      <Select
-        allowClear
-        showSearch
-        style={{ ...styles.select, width: 200 }}
-        optionFilterProp="children"
-        onSearch={this.searchCandidate}
-        placeholder="Candidate"
-        optionFilterProp="children"
-        onChange={value => this.handleFilterChange('select', 'mailId', value)}
-        filterOption={(input, option) =>
-      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-    }
-      >
-        {searchCandidate.map(candidate => <Option value={candidate}>{candidate}</Option>) }
-      </Select>
+				<Form.Item  {...tailFormItemLayout}>				
+				<Row gutter={8} justify="start" type="flex">                
+				<Col  >
+				<Button type="primary" htmlType="submit">Assign</Button>	
+				</Col>
+				<Col >
+				<Button  onClick={this.handleReset}>Clear</Button>
+				</Col>				
+				</Row>				
+				</Form.Item>		
+				</Form>	
+				</div>
 
-      <Select
-        showSearch
-        allowClear
-        style={{ ...styles.select, width: 200, marginLeft: 8 }}
-        optionFilterProp="children"
-        onSearch={this.searchQuestionBank}
-        onChange={value => this.handleFilterChange('select', 'questionBankName', value)}
-        placeholder="Question Bank"
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-    }
-      >
-        {searchQuestionBank.map(question => <Option value={question}>{question}</Option>) }
-      </Select>
-      <Select
-        allowClear
-        style={{ ...styles.select, width: 200, marginLeft: 8 }}
-        onChange={value => this.handleFilterChange('select', 'status', value)}
-        placeholder="Status"
-      >
-        { statusFilter.map(status => <Option value={status} >{status} </Option>) }
-      </Select>
-      <Divider />
-    </Row>
-    <Row type="flex" justify="space-between" style={{ marginTop: 8 }}>
-      <Col span={6}>
-        <Row type="flex" justify="start">
-          <Statistic
-            prefix={total == 0 ? <Icon theme="twoTone" twoToneColor="red" type="dislike" /> : <Icon theme="twoTone" twoToneColor="#52c41a" type="like" />}
-            value={total}
-          />
-        </Row>
-      </Col>
-      <Col span={6}>
-        <Row type="flex" justify="end">
-          <Button type="primary" style={{ marginRight: 8 }} onClick={() => this.setState({ visible: true })}>
-            <Icon type="plus" /> Add Candidate
-          </Button>
-          <Button type="primary" onClick={() => this.setState({ visible: true })}>
-            <Icon type="plus" /> Add Test
-          </Button>
-        </Row>
-      </Col>
-    </Row>
-
-    <Row type="start" style={{ marginTop: 16 }}>
-      <Table
-        rowKey={record => record.id}
-        bordered
-        size="middle"
-        columns={columns}
-        dataSource={this.setTableData()}
-        onChange={this.handleTableChange}
-        loading={this.state.loading}
-        pagination={this.state.pagination}
-      />
-    </Row>
-  </div>
-		  );
-		}
+		);
+	}
 }
 
-TestAssignment.contextTypes = {
-  role: PropTypes.string,
-  loggedInUser: PropTypes.string,
-};
-
-
 function mapStateToProps(state) {
-  return {
-	    dataList: state.get('manager').toJS().getAllTestAssignment.value,
-	    total: state.get('manager').toJS().getAllTestAssignment.count,
-	    searchQuestionBank: state.get('manager').toJS().searchQuestionBank,
-	    searchCandidate: state.get('manager').toJS().searchCandidate,
+	return {
+	};
+}
 
-  };https://drive.google.com/file/d/1KJpTr34M1t8eJe_fD3AMrqtXlrvh77oa/view?usp=drivesdk
-}https://drive.google.com/file/d/1KJpTr34M1t8eJe_fD3AMrqtXlrvh77oa/view?usp=drivesdk
-export default withRouter(connect(mapStateToProps)(TestAssignment));
+const TestAssignmentForm = Form.create({ name: 'test_assignment_form' })(TestAssignment);
+
+export default withRouter(connect(mapStateToProps)(TestAssignmentForm));
