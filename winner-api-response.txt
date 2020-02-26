@@ -1,0 +1,186 @@
+{
+  "status": 200,
+  "message": "SUCCESS",
+  "data": [
+    {
+      "id": "1f39dec5-38a8-44b4-9ba1-aa0b579b0dcf",
+      "district_rank": 1,
+      "state_rank": 1,
+      "created_at": "2020-02-26T06:31:00.137Z",
+      "content_id": "292760ae-3b83-4216-85d0-9830514b7e00",
+      "content": {
+        "id": "292760ae-3b83-4216-85d0-9830514b7e00",
+        "file_name": "audio",
+        "file_size": "13889",
+        "content_title": "audio.mp3",
+        "is_active": true,
+        "is_artistic": false,
+        "positive": 0,
+        "negative": 0,
+        "warning": 0,
+        "share": 0,
+        "score": 0,
+        "uploaded_time": "2020-02-26T06:23:37.289Z",
+        "status": "254d8931-277b-48c3-8652-ba86250014ff",
+        "user_id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+        "schedule_id": "828f3414-b346-4f72-9669-aca49d6410e1",
+        "language_id": null,
+        "state_id": "5764cde2-d470-4d88-9cc3-018a214209ee",
+        "content_type_id": "0eac2799-4547-4c1f-8fd5-3f2134f38982",
+        "district_id": "8813c445-d0b8-4a22-95d4-b5fd2b080826",
+        "membership_id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+        "talent_id": "0000599d-3b08-4bf2-99e4-b63343e51cb0",
+        "membership": {
+          "id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+          "name": "UPP"
+        },
+        "contentType": {
+          "id": "0eac2799-4547-4c1f-8fd5-3f2134f38982",
+          "name": "AUDIO"
+        },
+        "users": {
+          "id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+          "profile_name": null,
+          "profile_image": null,
+          "contact_card": null
+        },
+        "votes": []
+      }
+    },
+    {
+      "id": "34e1cff0-1c35-4aec-9fc0-bcd6bd9c1358",
+      "district_rank": 1,
+      "state_rank": 1,
+      "created_at": "2020-02-26T06:31:00.140Z",
+      "content_id": "b241be13-fbbb-4e7f-a9a9-3c011f7edff3",
+      "content": {
+        "id": "b241be13-fbbb-4e7f-a9a9-3c011f7edff3",
+        "file_name": "video1",
+        "file_size": "318465",
+        "content_title": "video1.mp4",
+        "is_active": true,
+        "is_artistic": false,
+        "positive": 84848,
+        "negative": 75,
+        "warning": 0,
+        "share": 0,
+        "score": 0,
+        "uploaded_time": "2020-02-26T06:07:21.951Z",
+        "status": "254d8931-277b-48c3-8652-ba86250014ff",
+        "user_id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+        "schedule_id": "828f3414-b346-4f72-9669-aca49d6410e1",
+        "language_id": null,
+        "state_id": "5764cde2-d470-4d88-9cc3-018a214209ee",
+        "content_type_id": "72657b27-c275-4c58-bc21-ccdb7fa70d4d",
+        "district_id": "8813c445-d0b8-4a22-95d4-b5fd2b080826",
+        "membership_id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+        "talent_id": "0000599d-3b08-4bf2-99e4-b63343e51cb0",
+        "membership": {
+          "id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+          "name": "UPP"
+        },
+        "contentType": {
+          "id": "72657b27-c275-4c58-bc21-ccdb7fa70d4d",
+          "name": "VIDEO"
+        },
+        "users": {
+          "id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+          "profile_name": null,
+          "profile_image": null,
+          "contact_card": null
+        },
+        "votes": []
+      }
+    },
+    {
+      "id": "5165f04b-eb0f-4afb-bf93-0b2eca5ed3e2",
+      "district_rank": 1,
+      "state_rank": 1,
+      "created_at": "2020-02-26T06:31:00.140Z",
+      "content_id": "5a132a5c-5632-45b6-aa60-2227700878c1",
+      "content": {
+        "id": "5a132a5c-5632-45b6-aa60-2227700878c1",
+        "file_name": "word1",
+        "file_size": null,
+        "content_title": "word1",
+        "is_active": true,
+        "is_artistic": false,
+        "positive": 6666,
+        "negative": 56,
+        "warning": 0,
+        "share": 0,
+        "score": 0,
+        "uploaded_time": "2020-02-26T06:09:28.197Z",
+        "status": "254d8931-277b-48c3-8652-ba86250014ff",
+        "user_id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+        "schedule_id": "828f3414-b346-4f72-9669-aca49d6410e1",
+        "language_id": null,
+        "state_id": "5764cde2-d470-4d88-9cc3-018a214209ee",
+        "content_type_id": "885efb6d-792f-49a8-bd28-617b6e5bde0b",
+        "district_id": "8813c445-d0b8-4a22-95d4-b5fd2b080826",
+        "membership_id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+        "talent_id": "0000599d-3b08-4bf2-99e4-b63343e51cb0",
+        "membership": {
+          "id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+          "name": "UPP"
+        },
+        "contentType": {
+          "id": "885efb6d-792f-49a8-bd28-617b6e5bde0b",
+          "name": "WORD"
+        },
+        "users": {
+          "id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+          "profile_name": null,
+          "profile_image": null,
+          "contact_card": null
+        },
+        "votes": []
+      }
+    },
+    {
+      "id": "cef16d5f-5510-40e1-a4b3-bbd9c198c15d",
+      "district_rank": 1,
+      "state_rank": 1,
+      "created_at": "2020-02-26T06:31:00.140Z",
+      "content_id": "0343c26a-4775-428f-831c-396ca1b8c209",
+      "content": {
+        "id": "0343c26a-4775-428f-831c-396ca1b8c209",
+        "file_name": "paris",
+        "file_size": "29529",
+        "content_title": "paris.jpg",
+        "is_active": true,
+        "is_artistic": false,
+        "positive": 10000,
+        "negative": 10,
+        "warning": 0,
+        "share": 0,
+        "score": 0,
+        "uploaded_time": "2020-02-26T06:03:52.321Z",
+        "status": "254d8931-277b-48c3-8652-ba86250014ff",
+        "user_id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+        "schedule_id": "828f3414-b346-4f72-9669-aca49d6410e1",
+        "language_id": null,
+        "state_id": "5764cde2-d470-4d88-9cc3-018a214209ee",
+        "content_type_id": "95dcd4b9-4808-417c-90d0-beb35137f26e",
+        "district_id": "8813c445-d0b8-4a22-95d4-b5fd2b080826",
+        "membership_id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+        "talent_id": "0000599d-3b08-4bf2-99e4-b63343e51cb0",
+        "membership": {
+          "id": "eb121141-3b7c-4086-90f0-b1437bb8c345",
+          "name": "UPP"
+        },
+        "contentType": {
+          "id": "95dcd4b9-4808-417c-90d0-beb35137f26e",
+          "name": "PICTURE"
+        },
+        "users": {
+          "id": "09fd3e6a-2cfc-40a0-a080-bf6e3ebcf93f",
+          "profile_name": null,
+          "profile_image": null,
+          "contact_card": null
+        },
+        "votes": []
+      }
+    }
+  ]
+}
