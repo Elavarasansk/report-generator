@@ -1,5 +1,56 @@
 
 
+select U.profile_name,U.profile_image,C.content_title,C.positive,
+C.negative, C.warning, C.share, C.score, C.uploaded_time,
+R.district_rank, R.state_rank,
+u.contact_card,
+R.content_id as content_id,
+C.is_active,
+c.district_id, D.name,
+c.state_id, S.name, L.name,
+c.content_type_id as content_type,C_t.name,
+C.schedule_id, Sh.end_date,
+C.membership_id, m.name as membership,
+U.id as user_id
+from rank as R
+Inner Join contents as C on R.content_id = C.id
+Inner Join users as U on C.user_id = U.id
+Inner Join content_types as C_t on C.content_type_id = C_t.id
+Inner Join membership as m on C.membership_id = m.id
+Inner Join districts as D on C.district_id = D.id
+Inner Join states as S on C.state_id = S.id
+Inner Join schedules as Sh on C.schedule_id = Sh.id
+Inner Join languages as L on C.language_id = L.id
+order by state_rank
+
+HOF:  It will fetch data from the hof table, So that live contents will not get disturbed or fetched.
+
+select U.profile_name,U.profile_image,C.content_title,C.positive,
+C.negative, C.warning, C.share, C.score, C.uploaded_time,
+H.district_rank, H.state_rank,
+u.contact_card,
+H.content_id as content_id,
+C.is_active,
+c.district_id, D.name,
+c.state_id, S.name, L.name,
+c.content_type_id as content_type,C_t.name,
+C.schedule_id, Sh.end_date,
+C.membership_id, m.name as membership,
+U.id as user_id,
+H.created_at
+from hof as H
+Inner Join contents as C on H.content_id = C.id
+Inner Join users as U on C.user_id = U.id
+Inner Join content_types as C_t on C.content_type_id = C_t.id
+Inner Join membership as m on C.membership_id = m.id
+Inner Join districts as D on C.district_id = D.id
+Inner Join states as S on C.state_id = S.id
+Inner Join schedules as Sh on C.schedule_id = Sh.id
+Inner Join languages as L on C.language_id = L.id
+order by state_rank
+
+
+
 {
   "responseBody": {
     "status": 200,
