@@ -6,9 +6,10 @@ R.district_rank, R.state_rank,
 u.contact_card,
 R.content_id as content_id,
 C.is_active,
-c.district_id, D.name,
-c.state_id, S.name, L.name,
-c.content_type_id as content_type,C_t.name,
+c.district_id, D.name as district,
+c.state_id, S.name as state, L.name as language,
+c.content_type_id, C_t.name as content_type ,
+
 C.schedule_id, Sh.end_date,
 C.membership_id, m.name as membership,
 U.id as user_id
@@ -23,17 +24,18 @@ Inner Join schedules as Sh on C.schedule_id = Sh.id
 Inner Join languages as L on C.language_id = L.id
 order by state_rank
 
-HOF:  It will fetch data from the hof table, So that live contents will not get disturbed or fetched.
-
+HOF  Query
 select U.profile_name,U.profile_image,C.content_title,C.positive,
 C.negative, C.warning, C.share, C.score, C.uploaded_time,
 H.district_rank, H.state_rank,
 u.contact_card,
 H.content_id as content_id,
 C.is_active,
-c.district_id, D.name,
-c.state_id, S.name, L.name,
-c.content_type_id as content_type,C_t.name,
+c.district_id, D.name as district,
+c.state_id, S.name as state, L.name as language,
+c.content_type_id, C_t.name as content_type ,
+c.content_type_id,C_t.name as content_type,
+
 C.schedule_id, Sh.end_date,
 C.membership_id, m.name as membership,
 U.id as user_id,
@@ -48,6 +50,7 @@ Inner Join states as S on C.state_id = S.id
 Inner Join schedules as Sh on C.schedule_id = Sh.id
 Inner Join languages as L on C.language_id = L.id
 order by state_rank
+
 
 
 
