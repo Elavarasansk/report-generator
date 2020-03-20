@@ -88,3 +88,21 @@ Branch : v2.0_cr_svn_sync,v2.0_cr_db_config,v2.0_cr-executor
 Code Review Branch : v2.0_cr
 Release Version Branch : v1.0_release
 GIT : http://192.168.41.136/IntrawebToolTeam-v2/VerupSqlClient
+
+
+Pdf Comparison Client
+Branch :branch-3
+Status : DEVELOPMENT / ENHANCEMENT
+Code Review Branch: nill
+Release Branch : develop
+Git: http://192.168.41.136/IntrawebToolTeam-v2/VerupPdfComparison-Client
+
+
+
+Pdf Comparison Server
+Branch : v1
+Status : CODE REVIEW
+Code Review Branch: nill
+Release Branch : ver-1.0
+Git: http://192.168.41.136/IntrawebToolTeam-v2/VerupPdfComparison-Server
+
