@@ -1,0 +1,35 @@
+pipeline {
+    agent any 
+    
+    stages {
+            stage('Deploy'){
+                steps{
+                    script {
+                    dprName = params.DprName
+                     echo "params.. ${dprName}"
+                 
+                     sh """ 
+                    cd "/Users/Shared/Jenkins/Home/workspace/maven-project/"
+                    java -jar helloworld.jar ${dprName}
+                    """
+                    }
+                   
+                    }
+                       
+              post {
+                success {
+                    script {
+                        echo "success"
+                    }
+                }
+                failure {
+                    script {
+                        echo "failure"
+                    }
+                }
+            }        
+            }
+                } 
+             
+            
+    }
