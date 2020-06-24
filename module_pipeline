@@ -1,0 +1,22 @@
+properties([parameters([choice(choices: ['COM', 'CAM', 'CFM', 'CBM', 'CCM'], description: 'select module to build.', name: 'Module')])])
+
+pipeline {
+    agent any 
+    
+    stages {
+            stage('Deploy'){
+                steps{
+                    script {
+                    module = params.Module
+                     echo "params.. ${module}"
+                 
+                     sh """ 
+                    cd "/Users/Shared/Jenkins/Home/workspace/maven-project/"
+                    java -jar helloworld.jar ${module}
+                    """
+                    }
+                   
+                    }
+                }
+            }
+    }
