@@ -1,35 +1,21 @@
-pipeline {
-    agent any 
-    
-    stages {
-            stage('Deploy'){
-                steps{
-                    script {
-                    dprName = params.DprName
-                     echo "params.. ${dprName}"
-                 
-                     sh """ 
-                    cd "/Users/Shared/Jenkins/Home/workspace/maven-project/"
-                    java -jar helloworld.jar ${dprName}
-                    """
-                    }
-                   
-                    }
-                       
-              post {
-                success {
-                    script {
-                        echo "success"
-                    }
-                }
-                failure {
-                    script {
-                        echo "failure"
-                    }
-                }
-            }        
-            }
-                } 
-             
-            
-    }
+<build>
+    <plugins>
+      <!-- any other plugins -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
