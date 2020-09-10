@@ -1,108 +1,14 @@
-
-SOS client 
-
-Status : Development Inprogess
-Branch : SSO-V1.1
-Code Review Branch : nill
-Release Version Branch : null
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/sso-client/
-
-SOS Server 
-
-Status : Development Inprogess
-Branch : SSO-1
-Code Review Branch : nill
-Release Version Branch : null
-Tech : NEST
-Server : 192.168.57.68 (Mongo Server)
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/sso-server/
-
-
-Data Check client:
-
-Status : Code Review / Bug FIX
-Branch : versionrelease-1.0.1
-Code Review Branch : versionrelease-1.0.2
-Release Version Branch : versionrelease-1.0.1
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/datacheck-client
-
-
-Data Check server/NODE:
-
-Status : Code Review
-Branch : check62
-Code Review Branch : master
-Release Version Branch : master
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/datacheck-node
-
-
-Data Check server/JAVA:
-
-Status : Code Review
-Branch : MR Pending
-Code Review Branch : master
-Release Version Branch : master
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/datacheck-java
-Note : 
-MR not merge 
-http://192.168.41.136/IntrawebToolTeam-v2/datacheck-java/merge_requests
-
-
-VersionUPLayout Client
-Status : COMPLETED
-Branch : v-4.0
-Code Review Branch : master
-Release Version Branch : master
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/VerupScreenLayout-Client
-
-
-
-VersionUPLayout Server/JAVA
-Status : CODE REVIEW
-Branch : v2.0_release
-Code Review Branch : v3.0_cr
-Release Version Branch : v-2.0
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/VerupScreenLayout-Server
-
-
-VersionUPLayout CDN
-Status : COMPLETED
-Branch : check0
-Code Review Branch : check0
-Release Version Branch : check0
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/VerupScreenLayout-CDN
-
-
-
-VersionUP SQL SERVER/JAVA
-Status : COMPLETED
-Branch : v2.0_cr_svn_sync,v2.0_cr_db_config,v2.0_cr-executor
-Code Review Branch : v2.0_cr
-Release Version Branch : v1.0_release
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/VerupSqlServer
-
-
-VersionUP SQL CLIENT
-Status : COMPLETED
-Branch : v2.0_cr_svn_sync,v2.0_cr_db_config,v2.0_cr-executor
-Code Review Branch : v2.0_cr
-Release Version Branch : v1.0_release
-GIT : http://192.168.41.136/IntrawebToolTeam-v2/VerupSqlClient
-
-
-Pdf Comparison Client
-Branch :branch-3
-Status : DEVELOPMENT / ENHANCEMENT
-Code Review Branch: nill
-Release Branch : develop
-Git: http://192.168.41.136/IntrawebToolTeam-v2/VerupPdfComparison-Client
-
-
-
-Pdf Comparison Server
-Branch : v1
-Status : CODE REVIEW
-Code Review Branch: nill
-Release Branch : ver-1.0
-Git: http://192.168.41.136/IntrawebToolTeam-v2/VerupPdfComparison-Server
-
+"transports": [
+      {
+        "type": "smtp",
+        "host": "mail.ivtlinfoview.co.jp",
+        "port": 587,
+        "secure": false,
+        "auth": {
+          "user": "iv_smartworks@ivtlinfoview.co.jp",
+          "pass": "M@i12$m@6t"
+        },
+        "tls": {
+          "rejectUnauthorized": false
+        }
+      }
